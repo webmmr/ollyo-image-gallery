@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { useRef, useState } from "react";
+// import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 const images = [
   {
@@ -51,6 +51,8 @@ const images = [
 export default function Gallery() {
   const [isSelected, setIsSelected] = useState([]);
   const [gallery, setGallery] = useState(images);
+  const dragPerson = useRef(0);
+  const draggedOverPerson = useRef(0);
 
   // Checking and Selecting which items are selected
   function handleChange(e) {
@@ -70,61 +72,51 @@ export default function Gallery() {
     setGallery(updatedGalley);
   }
 
-  // Rearranging the gallery after the drag and drop
-  function handleOnDragEnd(final) {
-    if (!final.destination) return;
+  // sorting after drag
+  function handleSort() {
+    const dupImages = [...images];
 
-    const updatedGallery = Array.from(gallery);
-    const [reorderedItem] = updatedGallery.splice(final.source.index, 1);
-    updatedGallery.splice(final.destination.index, 0, reorderedItem);
+    const temp = dupImages[dragPerson.current];
 
-    setGallery(updatedGallery);
+    dupImages[dragPerson.current] = dupImages[draggedOverPerson.current];
+
+    dupImages[draggedOverPerson.current] = temp;
+
+    setGallery(dupImages);
   }
 
   return (
     <section className="container">
       <div className="header">
         <p>{isSelected.length} Images Selected</p>
-        {isSelected.length > 0 && (
-          <button onClick={handleDelete}>Delete Images</button>
-        )}
+
+        <button onClick={handleDelete}>Delete Images</button>
       </div>
-      <DragDropContext onDragEnd={handleOnDragEnd}>
-        <Droppable droppableId="images">
-          {(provided) => (
-            <ul
-              className="gallery"
-              {...provided.droppableProps}
-              ref={provided.innerRef}
+
+      <ul className="gallery">
+        {gallery.map((item, index) => {
+          return (
+            <li
+              key={item.id}
+              className={`gallery-item gallery-item-${index + 1}`}
+              draggable
+              onDragStart={() => (dragPerson.current = index)}
+              onDragEnter={() => (draggedOverPerson.current = index)}
+              onDragEnd={handleSort}
+              onDragOver={(e) => e.preventDefault()}
             >
-              {gallery.map((item, index) => {
-                return (
-                  <Draggable key={item.id} draggableId={item.id} index={index}>
-                    {(provided) => (
-                      <li
-                        className={`gallery-item gallery-item-${index + 1}`}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        ref={provided.innerRef}
-                      >
-                        <input
-                          type="checkbox"
-                          name="galleryImages"
-                          id={item.id}
-                          value={item.id}
-                          onChange={handleChange}
-                        />
-                        <img src={item.src} alt={item.id} />
-                      </li>
-                    )}
-                  </Draggable>
-                );
-              })}
-              {provided.placeholder}
-            </ul>
-          )}
-        </Droppable>
-      </DragDropContext>
+              <input
+                type="checkbox"
+                name="galleryImages"
+                id={item.id}
+                value={item.id}
+                onChange={handleChange}
+              />
+              <img src={item.src} alt={item.id} />
+            </li>
+          );
+        })}
+      </ul>
     </section>
   );
 }

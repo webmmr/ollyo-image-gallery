@@ -61,8 +61,6 @@ button:hover {
   grid-template-rows: repeat(3, 1fr);
   grid-column-gap: 30px;
   grid-row-gap: 30px;
-
-  /* display: flex; */
 }
 
 .gallery li {
