@@ -36,6 +36,25 @@ body {
   margin-bottom: 20px;
 }
 
+p {
+  font-weight: 700;
+}
+
+button {
+  padding: 12px 22px;
+  border-radius: 10px;
+  font-weight: 700;
+  border: none;
+  color: #212121;
+  background-color: #ff416c;
+  transition: all 0.3s ease-in-out;
+}
+
+button:hover {
+  background-color: #ff4b2b;
+  cursor: pointer;
+}
+
 .gallery {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -57,11 +76,17 @@ body {
   position: absolute;
   top: 10px;
   left: 10px;
+  width: 16px;
+  height: 16px;
   display: none;
   z-index: 10;
 }
 
 .gallery li:hover input {
+  display: block;
+}
+
+.gallery li input:checked {
   display: block;
 }
 

@@ -49,13 +49,28 @@ const images = [
 ];
 
 export default function Gallery() {
-  const [selected, setSelected] = useState(0);
+  const [isSelected, setIsSelected] = useState([]);
   const [gallery, setGallery] = useState(images);
 
-  function handleOnDragStart(final) {
-    console.log(final);
+  // Checking and Selecting which items are selected
+  function handleChange(e) {
+    const { value, checked } = e.target;
+
+    if (checked) {
+      setIsSelected((prev) => [...prev, value]);
+    }
   }
 
+  // Deleting Selected Items and updating the gallery
+  function handleDelete() {
+    const updatedGalley = gallery.filter((item) => {
+      if (!isSelected.includes(item.id)) return item;
+    });
+
+    setGallery(updatedGalley);
+  }
+
+  // Rearranging the gallery after the drag and drop
   function handleOnDragEnd(final) {
     if (!final.destination) return;
 
@@ -69,13 +84,12 @@ export default function Gallery() {
   return (
     <section className="container">
       <div className="header">
-        <p>{selected} images selected</p>
-        <button>Delete Images</button>
+        <p>{isSelected.length} Images Selected</p>
+        {isSelected.length > 0 && (
+          <button onClick={handleDelete}>Delete Images</button>
+        )}
       </div>
-      <DragDropContext
-        onDragStart={handleOnDragStart}
-        onDragEnd={handleOnDragEnd}
-      >
+      <DragDropContext onDragEnd={handleOnDragEnd}>
         <Droppable droppableId="images">
           {(provided) => (
             <ul
@@ -97,6 +111,8 @@ export default function Gallery() {
                           type="checkbox"
                           name="galleryImages"
                           id={item.id}
+                          value={item.id}
+                          onChange={handleChange}
                         />
                         <img src={item.src} alt={item.id} />
                       </li>
