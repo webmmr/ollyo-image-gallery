@@ -51,8 +51,8 @@ const images = [
 export default function Gallery() {
   const [isSelected, setIsSelected] = useState([]);
   const [gallery, setGallery] = useState(images);
-  const dragPerson = useRef(0);
-  const draggedOverPerson = useRef(0);
+  const dragImage = useRef(0);
+  const draggedOverImage = useRef(0);
 
   // Checking and Selecting which items are selected
   function handleChange(e) {
@@ -76,11 +76,11 @@ export default function Gallery() {
   function handleSort() {
     const dupImages = [...images];
 
-    const temp = dupImages[dragPerson.current];
+    const temp = dupImages[dragImage.current];
 
-    dupImages[dragPerson.current] = dupImages[draggedOverPerson.current];
+    dupImages[dragImage.current] = dupImages[draggedOverImage.current];
 
-    dupImages[draggedOverPerson.current] = temp;
+    dupImages[draggedOverImage.current] = temp;
 
     setGallery(dupImages);
   }
