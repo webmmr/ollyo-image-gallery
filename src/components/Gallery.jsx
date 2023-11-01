@@ -49,11 +49,14 @@ const images = [
 ];
 
 export default function Gallery() {
+  const [selected, setSelected] = useState(0);
   const [gallery, setGallery] = useState(images);
 
-  function handleOnDragEnd(final) {
+  function handleOnDragStart(final) {
     console.log(final);
+  }
 
+  function handleOnDragEnd(final) {
     if (!final.destination) return;
 
     const updatedGallery = Array.from(gallery);
@@ -65,7 +68,14 @@ export default function Gallery() {
 
   return (
     <section className="container">
-      <DragDropContext onDragEnd={handleOnDragEnd}>
+      <div className="header">
+        <p>{selected} images selected</p>
+        <button>Delete Images</button>
+      </div>
+      <DragDropContext
+        onDragStart={handleOnDragStart}
+        onDragEnd={handleOnDragEnd}
+      >
         <Droppable droppableId="images">
           {(provided) => (
             <ul
@@ -78,11 +88,16 @@ export default function Gallery() {
                   <Draggable key={item.id} draggableId={item.id} index={index}>
                     {(provided) => (
                       <li
-                        className={`gallery-item-${index + 1}`}
+                        className={`gallery-item gallery-item-${index + 1}`}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                         ref={provided.innerRef}
                       >
+                        <input
+                          type="checkbox"
+                          name="galleryImages"
+                          id={item.id}
+                        />
                         <img src={item.src} alt={item.id} />
                       </li>
                     )}
