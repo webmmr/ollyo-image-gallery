@@ -100,8 +100,8 @@ export default function Gallery() {
               key={item.id}
               className={`gallery-item gallery-item-${index + 1}`}
               draggable
-              onDragStart={() => (dragPerson.current = index)}
-              onDragEnter={() => (draggedOverPerson.current = index)}
+              onDragStart={() => (dragImage.current = index)}
+              onDragEnter={() => (draggedOverImage.current = index)}
               onDragEnd={handleSort}
               onDragOver={(e) => e.preventDefault()}
             >
