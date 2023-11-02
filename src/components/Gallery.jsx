@@ -60,7 +60,13 @@ export default function Gallery() {
 
     if (checked) {
       setIsSelected((prev) => [...prev, value]);
+    } else {
+      setIsSelected((prev) => prev.filter((item) => item !== value));
     }
+  }
+
+  function addImage() {
+    console.log("Image Added");
   }
 
   // Deleting Selected Items and updating the gallery
@@ -72,25 +78,33 @@ export default function Gallery() {
     setGallery(updatedGalley);
   }
 
-  // sorting after drag
-  function handleSort() {
-    const dupImages = [...images];
+  // // sorting after drag
+  // function handleSort() {
+  //   const dupImages = [...images];
 
-    const temp = dupImages[dragImage.current];
+  //   const temp = dupImages[dragImage.current];
 
-    dupImages[dragImage.current] = dupImages[draggedOverImage.current];
+  //   dupImages[dragImage.current] = dupImages[draggedOverImage.current];
 
-    dupImages[draggedOverImage.current] = temp;
+  //   dupImages[draggedOverImage.current] = temp;
 
-    setGallery(dupImages);
-  }
+  //   setGallery(dupImages);
+  // }
 
   return (
     <section className="container">
       <div className="header">
-        <p>{isSelected.length} Images Selected</p>
+        <h1>
+          {isSelected.length > 0
+            ? `${isSelected.length} Imgaes Selected`
+            : "Gallery"}
+        </h1>
 
-        <button onClick={handleDelete}>Delete Images</button>
+        {isSelected.length > 0 ? (
+          <button onClick={handleDelete}>Delete Images</button>
+        ) : (
+          ""
+        )}
       </div>
 
       <ul className="gallery">
@@ -98,11 +112,24 @@ export default function Gallery() {
           return (
             <li
               key={item.id}
-              className={`gallery-item gallery-item-${index + 1}`}
+              className={`gallery-item gallery-item-${index + 1} ${
+                dragImage.current === index ? "dragging" : ""
+              } ${draggedOverImage.current !== index ? "drag-over" : ""}`}
               draggable
               onDragStart={() => (dragImage.current = index)}
-              onDragEnter={() => (draggedOverImage.current = index)}
-              onDragEnd={handleSort}
+              onDragEnter={() => {
+                if (dragImage.current === index) return;
+
+                const temp = gallery[dragImage.current];
+                const newGallery = [...gallery];
+                newGallery[dragImage.current] = newGallery[index];
+                newGallery[index] = temp;
+
+                setGallery(newGallery);
+                dragImage.current = index;
+                draggedOverImage.current = index;
+              }}
+              // onDragEnd={handleSort}
               onDragOver={(e) => e.preventDefault()}
             >
               <input
@@ -116,6 +143,11 @@ export default function Gallery() {
             </li>
           );
         })}
+        <li className="gallery-item add" onClick={addImage}>
+          <input type="file" name="galleryImages" />
+          <img src="/images/placeholder.png" alt="placeholder image" />
+          <p>Add Image</p>
+        </li>
       </ul>
     </section>
   );

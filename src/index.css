@@ -41,17 +41,16 @@ p {
 }
 
 button {
-  padding: 12px 22px;
-  border-radius: 10px;
   font-weight: 700;
+  font-size: 1rem;
   border: none;
   color: #212121;
-  background-color: #ff416c;
+  background: transparent;
   transition: all 0.3s ease-in-out;
 }
 
 button:hover {
-  background-color: #ff4b2b;
+  color: #ff4b2b;
   cursor: pointer;
 }
 
@@ -63,14 +62,14 @@ button:hover {
   grid-row-gap: 30px;
 }
 
-.gallery li {
+.gallery-item {
   list-style: none;
   position: relative;
   overflow: hidden;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.1s linear;
 }
 
-.gallery li input {
+.gallery-item input {
   position: absolute;
   top: 10px;
   left: 10px;
@@ -80,15 +79,15 @@ button:hover {
   z-index: 10;
 }
 
-.gallery li:hover input {
+.gallery-item:hover input {
   display: block;
 }
 
-.gallery li input:checked {
+.gallery-item input:checked {
   display: block;
 }
 
-.gallery li::after {
+.gallery-item::after {
   content: "";
   position: absolute;
   background-color: rgba(0, 0, 0, 0.5);
@@ -98,13 +97,14 @@ button:hover {
   opacity: 0;
   height: 97%;
   border-radius: 10px;
+  transition: all 0.3s ease-in-out;
 }
 
-.gallery li:hover::after {
+.gallery-item:hover::after {
   opacity: 1;
 }
 
-.gallery li img {
+.gallery-item img {
   border: 1px solid #ccc;
   max-width: 100%;
   border-radius: 10px;
@@ -145,4 +145,123 @@ button:hover {
 }
 .gallery-item-12 {
   grid-area: 3 / 5 / 4 / 6;
+}
+
+.add {
+  display: grid;
+  place-content: center;
+  border: 1px dashed #ccc;
+  border-radius: 10px;
+}
+
+.add img {
+  margin: 0 auto;
+  margin-bottom: 5px;
+}
+
+.dragging {
+  transform: translateX(-10px); /* Adjust the amount of translation as needed */
+}
+
+.drag-over {
+  /* Define the styles for the target image when dragged over */
+  transform: translate(0px); /* Adjust the border style as needed */
+}
+
+@media (max-width: 767px) {
+  .container {
+    max-width: 720px;
+  }
+  .gallery {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
+  }
+
+  .gallery-item-1 {
+    grid-area: 1 / 1 / 3 / 3;
+  }
+  .gallery-item-2 {
+    grid-area: 1 / 3 / 2 / 4;
+  }
+  .gallery-item-3 {
+    grid-area: 2 / 3 / 3 / 4;
+  }
+  .gallery-item-4 {
+    grid-area: 3 / 1 / 4 / 2;
+  }
+  .gallery-item-5 {
+    grid-area: 3 / 2 / 4 / 3;
+  }
+  .gallery-item-6 {
+    grid-area: 3 / 3 / 4 / 4;
+  }
+  .gallery-item-7 {
+    grid-area: 4 / 1 / 5 / 2;
+  }
+  .gallery-item-8 {
+    grid-area: 4 / 2 / 5 / 3;
+  }
+  .gallery-item-9 {
+    grid-area: 4 / 3 / 5 / 4;
+  }
+  .gallery-item-10 {
+    grid-area: 5 / 1 / 6 / 2;
+  }
+  .gallery-item-11 {
+    grid-area: 5 / 2 / 6 / 3;
+  }
+  .gallery-item-12 {
+    grid-area: 5 / 3 / 6 / 4;
+  }
+}
+
+@media (max-width: 575px) {
+  .container {
+    max-width: 500px;
+  }
+  .gallery {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+  }
+
+  .gallery-item-1 {
+    grid-area: 1 / 1 / 3 / 3;
+  }
+  .gallery-item-2 {
+    grid-area: 3 / 1 / 4 / 2;
+  }
+  .gallery-item-3 {
+    grid-area: 3 / 2 / 4 / 3;
+  }
+  .gallery-item-4 {
+    grid-area: 4 / 1 / 5 / 2;
+  }
+  .gallery-item-5 {
+    grid-area: 4 / 2 / 5 / 3;
+  }
+  .gallery-item-6 {
+    grid-area: 5 / 1 / 6 / 2;
+  }
+  .gallery-item-7 {
+    grid-area: 5 / 2 / 6 / 3;
+  }
+  .gallery-item-8 {
+    grid-area: 6 / 1 / 7 / 2;
+  }
+  .gallery-item-9 {
+    grid-area: 6 / 2 / 7 / 3;
+  }
+  .gallery-item-10 {
+    grid-area: 7 / 1 / 8 / 2;
+  }
+  .gallery-item-11 {
+    grid-area: 7 / 2 / 8 / 3;
+  }
+  .gallery-item-12 {
+    grid-area: 8 / 1 / 9 / 2;
+  }
 }
