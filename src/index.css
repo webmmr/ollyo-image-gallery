@@ -60,25 +60,30 @@ button:hover {
   grid-template-rows: repeat(3, 1fr);
   grid-column-gap: 30px;
   grid-row-gap: 30px;
+  transition: all 0.1s ease;
 }
 
 .gallery-item {
   list-style: none;
   position: relative;
   overflow: hidden;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+
   animation-duration: 0.3s;
   animation-timing-function: ease;
   animation-fill-mode: forwards;
 }
 
-.gallery-item input {
+.gallery-item input[type="checkbox"] {
   position: absolute;
   top: 10px;
   left: 10px;
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   display: none;
   z-index: 10;
+  border-radius: 3px;
 }
 
 .gallery-item:hover input {
@@ -97,9 +102,9 @@ button:hover {
   left: 0;
   width: 100%;
   opacity: 0;
-  height: 97%;
+  height: 100%;
   border-radius: 10px;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.1s ease-in-out;
 }
 
 .gallery-item:hover::after {
@@ -107,8 +112,8 @@ button:hover {
 }
 
 .gallery-item img {
-  border: 1px solid #ccc;
   max-width: 100%;
+  transform: scale(1.05);
   border-radius: 10px;
 }
 
@@ -169,15 +174,32 @@ button:hover {
   animation-name: dragOverItem;
 }
 
+/* CSS */
+.gallery-item.dragging img {
+  opacity: 0; /* You can adjust the opacity as needed */
+}
+
+.add input {
+  display: none;
+}
+
+.image-upload {
+  padding: 10px 20px;
+  cursor: pointer;
+  text-align: center;
+  display: inline-block;
+  font-weight: bold;
+}
+
 @keyframes dragItem {
   0% {
     transform: translateX(0);
   }
   50% {
-    transform: translateX(-10px);
+    transform: translateX(-5px);
   }
   100% {
-    transform: translateX(0);
+    transform: translateX(0px);
   }
 }
 
@@ -186,10 +208,10 @@ button:hover {
     transform: translateX(0);
   }
   50% {
-    transform: translateX(10px);
+    transform: translateX(5px);
   }
   100% {
-    transform: translateX(0);
+    transform: translateX(0px);
   }
 }
 

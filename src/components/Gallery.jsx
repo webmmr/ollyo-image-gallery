@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
-// import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+
+const MAX_FILE_SIZE = 1 * 1024 * 1024;
 
 const images = [
   {
@@ -51,8 +52,8 @@ const images = [
 export default function Gallery() {
   const [isSelected, setIsSelected] = useState([]);
   const [gallery, setGallery] = useState(images);
-  const dragImage = useRef(0);
-  const draggedOverImage = useRef(0);
+  const dragImage = useRef(null);
+  const draggedOverImage = useRef(null);
 
   // Checking and Selecting which items are selected
   function handleChange(e) {
@@ -65,10 +66,6 @@ export default function Gallery() {
     }
   }
 
-  function addImage() {
-    console.log("Image Added");
-  }
-
   // Deleting Selected Items and updating the gallery
   function handleDelete() {
     const updatedGalley = gallery.filter((item) => {
@@ -76,6 +73,7 @@ export default function Gallery() {
     });
 
     setGallery(updatedGalley);
+    setIsSelected([]);
   }
 
   // Pushing the images while dragging to create space for the dragged one
@@ -90,6 +88,38 @@ export default function Gallery() {
 
     setGallery(updatedGallery);
     dragImage.current = index;
+  }
+
+  // Image Upload Functionality
+  function handleImageUpload(e) {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size <= MAX_FILE_SIZE) {
+        const newImage = {
+          id: `image${images.length + 1}`,
+          src: `/images/${file.name}`,
+        };
+
+        // New Image can be pushed here to the gallery array and also use a backend server to store the new Image
+        // setGallery((prev) => [...prev, newImage]);
+
+        console.log(
+          "New Gallery with the updated Item if the previous setGallery function is invoked"
+        );
+      } else {
+        alert(
+          "File size exceeds 1MB. Or File type not supported Please choose a different file."
+        );
+      }
+    }
+  }
+
+  // removing the dragging class at the end of dragging
+  function handleDragEnd() {
+    const draggedItem = document.querySelector(".gallery-item.dragging");
+    if (draggedItem) {
+      draggedItem.classList.remove("dragging");
+    }
   }
 
   return (
@@ -119,6 +149,7 @@ export default function Gallery() {
               draggable
               onDragStart={() => (dragImage.current = index)}
               onDragEnter={() => handleOnDragEnter(index)}
+              onDragEnd={handleDragEnd}
               onDragOver={(e) => e.preventDefault()}
             >
               <input
@@ -132,10 +163,17 @@ export default function Gallery() {
             </li>
           );
         })}
-        <li className="gallery-item add" onClick={addImage}>
-          <input type="file" name="galleryImages" />
-          <img src="/images/placeholder.png" alt="placeholder image" />
-          <p>Add Image</p>
+
+        <li className=" add">
+          <label className="image-upload">
+            <img src="/images/placeholder.png" alt="placeholder image" />
+            <p>Add Image</p>
+            <input
+              type="file"
+              accept="image/jpeg, image/png, image/webp"
+              onChange={handleImageUpload}
+            />
+          </label>
         </li>
       </ul>
     </section>
