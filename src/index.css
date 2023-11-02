@@ -66,7 +66,9 @@ button:hover {
   list-style: none;
   position: relative;
   overflow: hidden;
-  transition: all 0.1s linear;
+  animation-duration: 0.3s;
+  animation-timing-function: ease;
+  animation-fill-mode: forwards;
 }
 
 .gallery-item input {
@@ -160,12 +162,35 @@ button:hover {
 }
 
 .dragging {
-  transform: translateX(-10px); /* Adjust the amount of translation as needed */
+  animation-name: dragItem;
 }
 
 .drag-over {
-  /* Define the styles for the target image when dragged over */
-  transform: translate(0px); /* Adjust the border style as needed */
+  animation-name: dragOverItem;
+}
+
+@keyframes dragItem {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-10px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes dragOverItem {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(10px);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 
 @media (max-width: 767px) {

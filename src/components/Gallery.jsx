@@ -78,18 +78,19 @@ export default function Gallery() {
     setGallery(updatedGalley);
   }
 
-  // // sorting after drag
-  // function handleSort() {
-  //   const dupImages = [...images];
+  // Pushing the images while dragging to create space for the dragged one
+  function handleOnDragEnter(index) {
+    if (dragImage.current === index) return;
 
-  //   const temp = dupImages[dragImage.current];
+    const updatedGallery = [...gallery];
+    const draggedItem = updatedGallery[dragImage.current];
 
-  //   dupImages[dragImage.current] = dupImages[draggedOverImage.current];
+    updatedGallery.splice(dragImage.current, 1);
+    updatedGallery.splice(index, 0, draggedItem);
 
-  //   dupImages[draggedOverImage.current] = temp;
-
-  //   setGallery(dupImages);
-  // }
+    setGallery(updatedGallery);
+    dragImage.current = index;
+  }
 
   return (
     <section className="container">
@@ -114,22 +115,10 @@ export default function Gallery() {
               key={item.id}
               className={`gallery-item gallery-item-${index + 1} ${
                 dragImage.current === index ? "dragging" : ""
-              } ${draggedOverImage.current !== index ? "drag-over" : ""}`}
+              } ${draggedOverImage.current === index ? "drag-over" : ""}`}
               draggable
               onDragStart={() => (dragImage.current = index)}
-              onDragEnter={() => {
-                if (dragImage.current === index) return;
-
-                const temp = gallery[dragImage.current];
-                const newGallery = [...gallery];
-                newGallery[dragImage.current] = newGallery[index];
-                newGallery[index] = temp;
-
-                setGallery(newGallery);
-                dragImage.current = index;
-                draggedOverImage.current = index;
-              }}
-              // onDragEnd={handleSort}
+              onDragEnter={() => handleOnDragEnter(index)}
               onDragOver={(e) => e.preventDefault()}
             >
               <input
